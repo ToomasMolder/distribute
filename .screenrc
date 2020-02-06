@@ -1,0 +1,9 @@
+escape ^A^A # To have C-a C-a send an actual C-a ...
+bind o other # ... and have C-a o switch windows
+autodetach on # Autodetach session on hangup instead of terminating screen completely
+startup_message off # Turn off the splash screen
+defscrollback 30000 # Use a 30000-line scrollback buffer
+termcapinfo xterm* ti@:te@ # Enable mouse scrolling and scroll bar history scrolling
+# vbell off # Turn off visual bell
+caption always “%{kB}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{kB}%?%+Lw%?”
+hardstatus alwayslastline “%{BW}%16=%l %{BW}%50=%d/%m/%Y %{BW}%80=%c%=”
