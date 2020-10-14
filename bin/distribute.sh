@@ -1,17 +1,27 @@
 #!/bin/bash
+###################################################################
+# Script Name   : distribute.sh
+# Script version: 1.0
+# Script date   : 2020-10-06
+# Description   : Distribute my settings and management scripts 
+#               : throughout my servers
+# Author        : Toomas Mölder
+# Email         : toomas.molder@gmail.com
+###################################################################
 
-SOURCE=$(eval echo "~")
+# SOURCE=$(eval echo "~")
+SOURCE="${HOME}"
 # echo "SOURCE = ${SOURCE}"
 
-# We assume the script itself to be distributed as well into ${HOME}/bin
+# We assume the script itself to be distributed as well
 # MYSELF="${SOURCE}/bin/distribute.sh"
 MYSELF="${0}"
 
-# Set up list of files to be distributed into ${HOME}
-DOTFILES="${SOURCE}/.bash_aliases ${SOURCE}/.profile ${SOURCE}/.screenrc"
+# Set up list of files to be distributed
+DOTFILES="${SOURCE}/.profile ${SOURCE}/.bashrc ${SOURCE}/.bash_aliases ${SOURCE}/.vimrc ${SOURCE}/.screenrc"
 
-# Set up list of management scripts to be distributed into ${HOME}/bin
-BINFILES="${SOURCE}/bin/colors.sh ${SOURCE}/bin/highlight.sh"
+# Set up list of management scripts to be distributed
+BINFILES="${SOURCE}/bin/colours.sh ${SOURCE}/bin/highlight.sh ${SOURCE}/bin/update.sh"
 
 # Set up space-delimited list of my servers
 DESTINATIONS=""

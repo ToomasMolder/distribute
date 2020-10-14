@@ -1,30 +1,78 @@
-# distribute
+# Make me handy
 
+Make my Ubuntu working environment handy to use.
 Distribute my settings and management scripts throughout my servers.
 
-## Prepare bin/distribute.sh
+Note! It works on *my* server(s). Feel free to modify in a way it works on your server(s) as well.
 
-### ${HOME}
+## Download and prepare
 
-Set up list of files to be distributed into ${HOME}, sample:
-
-```bash
-DOTFILES="${SOURCE}/.bash_aliases ${SOURCE}/.profile ${SOURCE}/.screenrc"
-```
-
-More to be added if you wish.
-
-### ${HOME}/bin
-
-Set up list of management scripts to be distributed into ${HOME}/bin, sample:
+Download, use Git or checkout with SVN using the web URL.
 
 ```bash
-BINFILES="${SOURCE}/bin/colors.sh ${SOURCE}/bin/highlight.sh"
+REPO="make-me-handy"
+REPOSRC="https://github.com/ToomasMolder/${REPO}.git"
+LOCALREPO="${HOME}/${REPO}"
+# We do it this way so that we can abstract if from just git later on
+LOCALREPO_VC_DIR=${LOCALREPO}/.git
+if [ ! -d ${LOCALREPO_VC_DIR} ]
+then
+    cd ${HOME}
+    git clone ${REPOSRC} ${LOCALREPO}
+else
+    cd ${LOCALREPO}
+    git pull ${REPOSRC}
+fi
+# End
 ```
 
-More to be added if you wish.
+Relocate scripts from repository into ${HOME}/bin
 
-### My servers
+```bash
+mkdir --parents ${HOME}/bin
+/bin/cp --preserve ${LOCALREPO}/bin/* ${HOME}/bin
+
+Ensure scripts are executable and files readable
+
+```bash
+find ${LOCALREPO} -type d -print0 | xargs --null chmod 755
+find ${LOCALREPO} -type f -print0 | xargs --null chmod 644
+```
+
+## Make my Ubuntu working environment handy
+
+Make my environment handy, updates environment files 
+- ${HOME}/.profile
+- ${HOME}/.bashrc
+- ${HOME}/.bash_aliases
+- ${HOME}/.vimrc
+- ${HOME}/.screenrc
+
+Run from command line:
+
+```bash
+${HOME}/bin/make_my.sh
+```
+
+## Distribute my settings and management scripts throughout my servers
+
+### Prepare bin/distribute.sh
+
+Set up list of environment files to be distributed, sample:
+
+```bash
+DOTFILES="${HOME}/.profile ${HOME}/.bashrc ${HOME}/.bash_aliases ${HOME}/.vimrc ${HOME}/.screenrc"
+```
+
+More to be added if you have and wish.
+
+Set up list of management scripts to be distributed, sample:
+
+```bash
+BINFILES="${HOME}/bin/colours.sh ${HOME}/bin/highlight.sh ${HOME}/bin/update.sh"
+```
+
+More to be added if you have and wish.
 
 Set up space-delimited list of my servers:
 
@@ -32,24 +80,12 @@ Set up space-delimited list of my servers:
 DESTINATIONS=""
 ```
 
-### Executable
+Note! Script includes generation of public/private key pair and distribute public key as well.
 
-Make sure the file has rights to be executed.
-
-```bash
-chmod +x ./bin/distribute.sh
-```
-
-## Public/Private keys
-
-Script includes generation of public/private key pair and distribute public key as well.
-
-## Run
-
-From command line:
+Run from command line:
 
 ```bash
-./bin/distribute.sh
+${HOME}/bin/distribute.sh
 ```
 
 ## Author

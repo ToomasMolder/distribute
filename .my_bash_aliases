@@ -1,0 +1,80 @@
+###################################################################
+# Script Name   : .my_bash_aliases
+# Script version: 1.0
+# Script date   : 2020-10-06
+# Description   : Get my handy aliases
+# Usage         : /bin/cat ~/.my_bash_aliases >> ~/.bash_aliases; source ~/.bash_aliases
+# Author        : Toomas Mölder
+# Email         : toomas.molder@gmail.com
+###################################################################
+# 
+# Additional notes:
+# You may want to put all your additions into a separate file like ~/.bash_aliases
+# Usage from ~/.bashrc
+# if [ -f ~/.bash_aliases ]; then
+#     . ~/.bash_aliases
+# fi
+
+alias a=alias
+alias cc='/usr/bin/clear'
+alias ce='crontab -e'
+alias cl='crontab -l'
+alias dfh='/bin/df --human-readable'
+alias duh='/usr/bin/du --human-readable'
+alias dus='/usr/bin/du   --summarize --human-readable'
+alias h=history
+alias hgrep='history | /bin/egrep --ignore-case ${1}'
+alias lart='/bin/ls --all -l --reverse -t'
+alias less='/bin/less --RAW-CONTROL-CHARS'
+alias ll='/bin/ls -l'
+alias lrt='/bin/ls -l --reverse -t'
+alias rm='/bin/rm --interactive'
+alias rmf='/bin/rm'
+alias s='screen'
+alias sls='screen -ls'
+alias srd='screen -r -d ${1}'
+alias ss='screen -S ${1}'
+alias tf='/usr/bin/tail --follow'
+alias update='sudo apt-get update; sudo apt-get dist-upgrade; sudo apt-get autoremove; read -p "Press any key to continue... " -n1 -s; echo; cat /var/run/reboot-required; cat /var/run/reboot-required.pkgs'
+alias update_y='sudo apt-get --assume-yes update; sudo apt-get --assume-yes dist-upgrade; sudo apt-get --assume-yes autoremove; read -p "Press any key to continue... " -n1 -s; echo; cat /var/run/reboot-required; cat /var/run/reboot-required.pkgs'
+
+# 
+# Service status|stop|start|restart
+#
+status() { sudo systemctl status ${1}.service; }
+stop() { sudo systemctl stop ${1}.service; }
+start() { sudo systemctl start ${1}.service; }
+restart() { sudo systemctl restart ${1}.service; }
+
+#
+# Convert epoch date into human readable format
+#
+epoch() { /bin/date --date=@$1; }
+
+#
+# Find file from current point in directory tree
+#
+ff() { find . -printf "%TY-%Tm-%Td\t%s\t%p\n" | grep ${1}; }
+
+#
+# Find string within files from current point in directory tree
+#
+fsf() {
+        # find . -type f -print0 | xargs -I {} --null grep ${1} "{}"
+        find . -iname "*" -type f -print0 | xargs --null grep --with-filename ${1}
+}
+
+#
+# Find string within files from current point up to /
+#
+dnif() {
+    # Recursively list a file from PWD up the directory tree to root
+    [[ -n ${1} ]] || { echo "dnif [ls-opts] name"; return 1; }
+    local THERE=${PWD} RC=2
+    while [[ ${THERE} != / ]]
+        do [[ -e ${THERE}/${2:-$1} ]] && { ls ${2:+$1} ${THERE}/${2:-$1}; RC=0; }
+            THERE=$(dirname ${THERE})
+        done
+    [[ -e ${THERE}/${2:-$1} ]] && { ls ${2:+$1} /${2:-$1}; RC=0; }
+    return ${RC}
+}

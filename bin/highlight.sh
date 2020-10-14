@@ -1,4 +1,23 @@
 #!/bin/bash
+###################################################################
+# Script Name   : highlight.sh
+# Script version: 1.0
+# Script date   : 2020-10-06
+# Description   : Highlight text on screen
+# Author        : Toomas Mölder
+# Email         : toomas.molder@gmail.com
+###################################################################
+#
+# Usage: source ${HOME}/bin/highlight.sh
+#
+# Usage samples:
+# /bin/cat in use but can be used through less, tail, more etc as well
+#
+# When MUST contain some TEXT, then highlight with green
+# TEXT="some text"; /bin/cat FILE | /bin/egrep "${TEXT}" | highlight green "${TEXT}"
+#
+# Everything else but TEXT highlight with red
+# TEXT="some text"; /bin/cat FILE | /bin/egrep "${TEXT}" | highlight red "[-=:/_.\!()0-9A-Za-z]"
 
 function highlight() {
 	declare -A fg_color_map
