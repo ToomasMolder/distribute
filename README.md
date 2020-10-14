@@ -26,17 +26,19 @@ fi
 # End
 ```
 
+Ensure directories are visitable, files readable and scripts executable
+
+```bash
+find ${LOCALREPO} -type d -print0 | xargs --null chmod 755
+find ${LOCALREPO} -type f -print0 | xargs --null chmod 644
+find ${LOCALREPO} -type f -name "*.sh" -print0 | xargs --null chmod 755
+```
+
 Relocate scripts from repository into ${HOME}/bin
 
 ```bash
 mkdir --parents ${HOME}/bin
 /bin/cp --preserve ${LOCALREPO}/bin/* ${HOME}/bin
-
-Ensure scripts are executable and files readable
-
-```bash
-find ${LOCALREPO} -type d -print0 | xargs --null chmod 755
-find ${LOCALREPO} -type f -print0 | xargs --null chmod 644
 ```
 
 ## Make my Ubuntu working environment handy
