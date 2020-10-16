@@ -1,8 +1,8 @@
 #!/bin/bash
 ###################################################################
 # Script Name   : distribute.sh
-# Script version: 1.0
-# Script date   : 2020-10-06
+# Script version: 1.1
+# Script date   : 2020-10-16
 # Description   : Distribute my settings and management scripts 
 #               : throughout my servers
 # Author        : Toomas Mölder
@@ -19,6 +19,7 @@ MYSELF="${0}"
 
 # Set up list of files to be distributed
 DOTFILES="${SOURCE}/.profile ${SOURCE}/.bashrc ${SOURCE}/.bash_aliases ${SOURCE}/.vimrc ${SOURCE}/.screenrc"
+HTOPRC="${HOME}/.config/htop/htoprc"
 
 # Set up list of management scripts to be distributed
 BINFILES="${SOURCE}/bin/colours.sh ${SOURCE}/bin/highlight.sh ${SOURCE}/bin/update.sh"
@@ -55,7 +56,12 @@ for destination in $(echo ${DESTINATIONS}); do
             # echo "Hmmm, no public/private key pair available. Be prepared to enter your password ..."
             : # no-op
         fi
+        # DOTFILES
         scp -p ${DOTFILES} ${destination}:
+        # HTOPRC
+        ssh ${destination} "mkdir --parents .config/htop/"
+        scp -p ${HTOPRC} ${destination}:.config/htop/
+        # BINFILES
         ssh ${destination} "mkdir --parents bin/"
         scp -p ${MYSELF} ${BINFILES} ${destination}:bin/
     fi

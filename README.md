@@ -49,6 +49,7 @@ Make my environment handy, updates environment files
 - ${HOME}/.bash_aliases
 - ${HOME}/.vimrc
 - ${HOME}/.screenrc
+- ${HOME}/.config/htop/htoprc
 
 Run from command line:
 
@@ -58,12 +59,16 @@ ${HOME}/bin/make_my.sh
 
 ## Distribute my settings and management scripts throughout my servers
 
+Script distributes my own settings from one server to another using secure copy (`scp`).
+Note! Script includes generation of public/private key pair and distribute public key as well (`ssh-copy-id`)
+
 ### Prepare bin/distribute.sh
 
 Set up list of environment files to be distributed, sample:
 
 ```bash
 DOTFILES="${HOME}/.profile ${HOME}/.bashrc ${HOME}/.bash_aliases ${HOME}/.vimrc ${HOME}/.screenrc"
+HTOPRC="${HOME}/.config/htop/htoprc"
 ```
 
 More to be added if you have and wish.
@@ -81,8 +86,6 @@ Set up space-delimited list of my servers:
 ```bash
 DESTINATIONS=""
 ```
-
-Note! Script includes generation of public/private key pair and distribute public key as well.
 
 Run from command line:
 

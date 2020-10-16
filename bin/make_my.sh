@@ -1,8 +1,8 @@
 #!/bin/bash
 ###################################################################
 # Script Name   : make_my.sh
-# Script version: 1.0
-# Script date   : 2020-10-06
+# Script version: 1.1
+# Script date   : 2020-10-16
 # Description   : Make my environment handy
 # Args          : <none>
 # Author        : Toomas Mölder
@@ -95,6 +95,20 @@ function main() {
   update ${LOCALREPO}/.my_bash_aliases ${HOME}/.bash_aliases
   update ${LOCALREPO}/.my_vimrc ${HOME}/.vimrc
   update ${LOCALREPO}/.my_screenrc ${HOME}/.screenrc
+
+  # update ${HOME}/.config/htop/htoprc
+  # Beware! This file is rewritten by htop when settings are changed in the interface.
+  # The parser is also very primitive, and not human-friendly.
+  # color_scheme=
+  # Default = 0
+  # Monochromatic = 1
+  # Black on White = 2
+  # Light Terminal = 3
+  # MC = 4
+  # Black Night = 5
+  # Broken Gray = 6
+  # I like Broken Gray, ie color_scheme=6
+  sed --in-place=.bak --expression 's/^color_scheme=.*$/color_scheme=6/' ${HOME}/.config/htop/htoprc
 
   exit $?
 }
