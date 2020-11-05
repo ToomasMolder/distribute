@@ -1,7 +1,7 @@
 ###################################################################
 # Script Name   : .my_bash_aliases
-# Script version: 1.0
-# Script date   : 2020-10-06
+# Script version: 1.01
+# Script date   : 2020-11-05
 # Description   : Get my handy aliases
 # Usage         : /bin/cat ~/.my_bash_aliases >> ~/.bash_aliases; source ~/.bash_aliases
 # Author        : Toomas Mölder
@@ -28,6 +28,7 @@ alias lart='/bin/ls --all -l --reverse -t'
 alias less='/bin/less --RAW-CONTROL-CHARS'
 alias ll='/bin/ls -l'
 alias lrt='/bin/ls -l --reverse -t'
+alias reboot='history -a; sudo reboot now'
 alias rm='/bin/rm --interactive'
 alias rmf='/bin/rm'
 alias s='screen'
@@ -35,8 +36,8 @@ alias sls='screen -ls'
 alias srd='screen -r -d ${1}'
 alias ss='screen -S ${1}'
 alias tf='/usr/bin/tail --follow'
-alias update='sudo apt-get update; sudo apt-get dist-upgrade; sudo apt-get autoremove; read -p "Press any key to continue... " -n1 -s; echo; cat /var/run/reboot-required; cat /var/run/reboot-required.pkgs'
-alias update_y='sudo apt-get --assume-yes update; sudo apt-get --assume-yes dist-upgrade; sudo apt-get --assume-yes autoremove; read -p "Press any key to continue... " -n1 -s; echo; cat /var/run/reboot-required; cat /var/run/reboot-required.pkgs'
+alias update='sudo apt-get update; sudo apt-get dist-upgrade; sudo apt-get autoremove; read -p "Done. Press any key to continue... " -n1 -s; echo; cat /var/run/reboot-required; cat /var/run/reboot-required.pkgs; read -p "Reboot now? Press Ctrl-C to cancel or any key to reboot now... " -n1 -s; history -a; sudo reboot now'
+alias update_y='sudo apt-get --assume-yes update; sudo apt-get --assume-yes dist-upgrade; sudo apt-get --assume-yes autoremove; read -p "Done. Press any key to continue... " -n1 -s; echo; cat /var/run/reboot-required; cat /var/run/reboot-required.pkgs; read -p "Reboot now? Press Ctrl-C to cancel or any key to reboot now... " -n1 -s; history -a; sudo reboot now''
 
 # 
 # Service status|stop|start|restart
