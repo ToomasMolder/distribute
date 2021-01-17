@@ -24,7 +24,7 @@
 
 # Another version of coloured prompt, VLAN- or oganization-specific
 # Use your specific environment hostname excerpt, sample \.prod\. for PRODuction
-if hostname -f | egrep -q '\.prod\.'; then
+if hostname -f | egrep -q '\.prod\.|\.tt\.'; then
   _ROOT_COLOR=33  # yellow
   _USER_COLOR=36  # cyan
 else
@@ -32,7 +32,7 @@ else
   _USER_COLOR=32  # green
 fi
 # Use your specific environment hostname excerpt to be excluded from prompt, sample \.int\.ee
-hh=$(hostname -f | sed 's/\.int\.ee//')
+hh=$(hostname -f | sed 's/\.riaint\.ee//')
 if [ "`id -u`" -eq 0 ]; then
   PS1="\[\033[01;${_ROOT_COLOR}m\]\u@${hh}\[\033[01;34m\] \w #\[\033[00m\] "
 else

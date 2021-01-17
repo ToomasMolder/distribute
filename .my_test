@@ -1,0 +1,10 @@
+###################################################################
+# Script Name   : .my_test
+# Script version: 1.0
+# Script date   : 2021-01-17
+# Description   : test script version and date calculations
+# Usage         : /bin/cat ~/.my_test >> ~/.test; # test
+# Author        : Toomas Mölder
+# Email         : toomas.molder@gmail.com
+###################################################################
+#
