@@ -1,7 +1,7 @@
 ###################################################################
 # Script Name   : .my_profile
-# Script version: 1.0
-# Script date   : 2020-10-06
+# Script version: 1.1
+# Script date   : 2021-01-04
 # Description   : Get my login and profile handy
 # Usage         : /bin/cat ~/.my_profile >> ~/.profile; source ~/.profile
 # Author        : Toomas Mölder
@@ -22,7 +22,7 @@ HISTTIMEFORMAT="%F %T "
 # Load colours
 source ~/bin/colours.sh
 echo "${red}=== UPTIME ===${reset}"; uptime
-echo "${red}=== LAST ===${reset}"; last -n 10
+echo "${red}=== LAST ===${reset}"; last --fulltimes --fullnames --since -30days | egrep --invert-match "root" | head --lines 20
 echo "${red}=== DF ===${reset}"; df --human-readable
 echo "${red}=== SCREEN ===${reset}"; screen -ls
 # read -p "Press any key for 'htop' or Ctrl-C to break ... " -n1 -s; echo;

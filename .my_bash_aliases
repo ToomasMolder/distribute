@@ -1,7 +1,7 @@
 ###################################################################
 # Script Name   : .my_bash_aliases
-# Script version: 1.01
-# Script date   : 2020-11-05
+# Script version: 1.02
+# Script date   : 2021-01-17
 # Description   : Get my handy aliases
 # Usage         : /bin/cat ~/.my_bash_aliases >> ~/.bash_aliases; source ~/.bash_aliases
 # Author        : Toomas Mölder
@@ -21,7 +21,8 @@ alias ce='crontab -e'
 alias cl='crontab -l'
 alias dfh='/bin/df --human-readable'
 alias duh='/usr/bin/du --human-readable'
-alias dus='/usr/bin/du   --summarize --human-readable'
+alias dus='/usr/bin/du --summarize --human-readable'
+alias dux='sudo /usr/bin/du --all --human-readable --max-depth=1 / | sort --human-numeric-sort --reverse'
 alias h=history
 alias hgrep='history | /bin/egrep --ignore-case ${1}'
 alias lart='/bin/ls --all -l --reverse -t'
@@ -34,18 +35,26 @@ alias rmf='/bin/rm'
 alias s='screen'
 alias sls='screen -ls'
 alias srd='screen -r -d ${1}'
-alias ss='screen -S ${1}'
+# Use alias 'sss' instead of 'ss', which is another utility to investigate sockets https://man7.org/linux/man-pages/man8/ss.8.html
+alias sss='screen -S ${1}'
 alias tf='/usr/bin/tail --follow'
 alias update='sudo apt-get update; sudo apt-get dist-upgrade; sudo apt-get autoremove; read -p "Done. Press any key to continue... " -n1 -s; echo; cat /var/run/reboot-required; cat /var/run/reboot-required.pkgs; read -p "Reboot now? Press Ctrl-C to cancel or any key to reboot now... " -n1 -s; history -a; sudo reboot now'
-alias update_y='sudo apt-get --assume-yes update; sudo apt-get --assume-yes dist-upgrade; sudo apt-get --assume-yes autoremove; read -p "Done. Press any key to continue... " -n1 -s; echo; cat /var/run/reboot-required; cat /var/run/reboot-required.pkgs; read -p "Reboot now? Press Ctrl-C to cancel or any key to reboot now... " -n1 -s; history -a; sudo reboot now''
+alias update_y='sudo apt-get --assume-yes update; sudo apt-get --assume-yes dist-upgrade; sudo apt-get --assume-yes autoremove; read -p "Done. Press any key to continue... " -n1 -s; echo; cat /var/run/reboot-required; cat /var/run/reboot-required.pkgs; read -p "Reboot now? Press Ctrl-C to cancel or any key to reboot now... " -n1 -s; history -a; sudo reboot now'
 
 # 
 # Service status|stop|start|restart
 #
-status() { sudo systemctl status ${1}.service; }
+# For status it is OK to use all parameters "$@"
+status() { sudo systemctl --no-pager --full status "$@"; }
+# For others, try to be specific
 stop() { sudo systemctl stop ${1}.service; }
 start() { sudo systemctl start ${1}.service; }
 restart() { sudo systemctl restart ${1}.service; }
+
+#
+# Journalctl
+#
+j() { sudo journalctl --unit=${1} | tail --lines=20; }
 
 #
 # Convert epoch date into human readable format

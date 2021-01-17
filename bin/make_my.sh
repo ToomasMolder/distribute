@@ -41,10 +41,10 @@ function update() {
   #
   # echo "Get version and date"
   #
-  FROM_VERSION=$(egrep --no-messages "^[#\"] Script version *: " ${from} | tail --lines 1 | awk -F: '{print $2}' | awk '{print $1}' | sed -e 's/^[[:space:]]*//' | bc -l)
+  FROM_VERSION=$(egrep --no-messages "^[#\"] Script version *: " ${from} | tail --lines 1 | awk -F: '{print $2}' | awk '{print $1}' | sed -e 's/^[[:space:]]*//' | bc --mathlib)
   FROM_DATE=$(grep --no-messages "^[#\"] Script date *: " ${from} | awk -F: '{print $2}' | awk '{print $1}' | sed -e 's/^[[:space:]]*//')
   # echo "${from}: version: ${FROM_VERSION} (${FROM_DATE})"
-  TO_VERSION=$(egrep --no-messages "^[#\"] Script version *: " ${to} | tail --lines 1 | awk -F: '{print $2}' | awk '{print $1}' | sed -e 's/^[[:space:]]*//' | bc -l)
+  TO_VERSION=$(egrep --no-messages "^[#\"] Script version *: " ${to} | tail --lines 1 | awk -F: '{print $2}' | awk '{print $1}' | sed -e 's/^[[:space:]]*//' | bc --mathlib)
   TO_DATE=$(grep --no-messages "^[#\"] Script date *: " ${to} | awk -F: '{print $2}' | awk '{print $1}' | sed -e 's/^[[:space:]]*//')
   # echo "${to}: version: ${TO_VERSION} (${TO_DATE})"
   #
@@ -72,8 +72,10 @@ function update() {
   # smth like sed -n '/^###################################################################/,$ p' ${to} -i.bak
   #
   printf "${to}"
-  if (( $(echo "${TO_VERSION} < ${FROM_VERSION}" | bc -l) || $(echo "${TO_DATE} < ${FROM_DATE}" | bc -l))); then
+  if (( $(echo "${TO_VERSION} < ${FROM_VERSION}" | bc --mathlib) || $(echo "${TO_DATE} < ${FROM_DATE}" | bc --mathlib))); then
     if [ -f ${to} ]; then /bin/cp --preserve ${to} ${to}.bak; fi
+    # Add newline to the end of ${to} if not present yet to avoid script errors
+    [ -n "$(tail --bytes=1 ${to})" ] && printf '\n' >> ${to}
     /bin/cat ${from} >> ${to};
     echo " updated from version ${TO_VERSION} (${TO_DATE}) to version ${FROM_VERSION} (${FROM_DATE})."
   else
@@ -86,7 +88,7 @@ function main() {
   if [ "${XTRACE}" == "y" ]; then set -o xtrace; fi
 
   # echo "Check script version and date. Make update happen only when newest version is not yet present."
-  SCRIPT_VERSION=$(grep --no-messages "^# Script version *: " ${0} | awk -F: '{print $2}' | awk '{print $1}' | sed -e 's/^[[:space:]]*//' | bc -l)
+  SCRIPT_VERSION=$(grep --no-messages "^# Script version *: " ${0} | awk -F: '{print $2}' | awk '{print $1}' | sed -e 's/^[[:space:]]*//' | bc --mathlib)
   SCRIPT_DATE=$(grep --no-messages "^# Script date *: " ${0} | awk -F: '{print $2}' | awk '{print $1}' | sed -e 's/^[[:space:]]*//')
   # echo "${0} version: ${SCRIPT_VERSION} (${SCRIPT_DATE})"
 
@@ -109,6 +111,7 @@ function main() {
   # Broken Gray = 6
   # I like Broken Gray, ie color_scheme=6
   sed --in-place=.bak --expression 's/^color_scheme=.*$/color_scheme=6/' ${HOME}/.config/htop/htoprc
+  echo "${HOME}/.config/htop/htoprc color scheme updated."
 
   exit $?
 }
