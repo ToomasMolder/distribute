@@ -1,7 +1,7 @@
 #!/bin/bash
 ###################################################################
 # Script Name   : make_my.sh
-# Script version : 1.2
+# Script version: 1.3
 # Script date   : 2021-01-17
 # Description   : Make my environment handy
 # Args          : <none>
@@ -22,13 +22,13 @@
 ##
 
 function usage() {
-  [ "$*" ] && echo "$0: $*"
+  # [ "$*" ] && echo "$0: $*"
   /bin/sed --quiet '/^## /,/^$/s/^## \{0,1\}//p' "$0"
   exit $?
 } 2>/dev/null
 
 function version() {
-  [ "$*" ] && echo "$0: Version "
+  # [ "$*" ] && echo "$0: Version "
   SCRIPT_VERSION=$(/bin/grep --no-messages "^# Script version *: " ${0} | /usr/bin/tail --lines 1 | /usr/bin/awk --field-separator=':' '{print $2}' | /usr/bin/awk '{print $1}' | /bin/sed --expression='s/^[[:space:]]*//' | /usr/bin/bc --mathlib)
   SCRIPT_DATE=$(/bin/grep --no-messages "^# Script date *: " ${0} | /usr/bin/tail --lines 1 | /usr/bin/awk --field-separator=':' '{print $2}' | /usr/bin/awk '{print $1}' | /bin/sed --expression='s/^[[:space:]]*//')
   echo "${0} version: ${SCRIPT_VERSION} (${SCRIPT_DATE})"
@@ -40,24 +40,21 @@ function debug() {
 } 2>/dev/null
 
 function update() {
-  #
   debug "Check parameters and files available"
-  #
   if [ $# -ne 2 ]; then echo "${0}: Warning: function ${FUNCNAME}() MUST have EXACTLY two parameters, FROM and TO. Do nothing."; return; fi
 
   from="${1}"; to="${2}"
 
   if [ ! -s "${from}" ]; then echo "${0}: Warning: file ${from} does not exist or is empty. Do nothing."; return; fi
-  #
+
   debug "Get version and date"
-  #
   FROM_VERSION=$(/bin/egrep --no-messages "^[#\"] Script version *: " ${from} | /usr/bin/tail --lines 1 | /usr/bin/awk --field-separator=':' '{print $2}' | /usr/bin/awk '{print $1}' | /bin/sed --expression='s/^[[:space:]]*//' | /usr/bin/bc --mathlib)
   FROM_DATE=$(/bin/grep --no-messages "^[#\"] Script date *: " ${from} | /usr/bin/tail --lines 1 | /usr/bin/awk --field-separator=':' '{print $2}' | /usr/bin/awk '{print $1}' | /bin/sed --expression='s/^[[:space:]]*//')
   debug "${from}: version: ${FROM_VERSION} (${FROM_DATE})"
   TO_VERSION=$(/bin/egrep --no-messages "^[#\"] Script version *: " ${to} | /usr/bin/tail --lines 1 | /usr/bin/awk --field-separator=':' '{print $2}' | /usr/bin/awk '{print $1}' | /bin/sed --expression='s/^[[:space:]]*//' | /usr/bin/bc --mathlib)
   TO_DATE=$(/bin/grep --no-messages "^[#\"] Script date *: " ${to} | /usr/bin/tail --lines 1 | /usr/bin/awk --field-separator=':' '{print $2}' | /usr/bin/awk '{print $1}' | /bin/sed --expression='s/^[[:space:]]*//')
   debug "${to}: version: ${TO_VERSION} (${TO_DATE})"
-  #
+
   debug "Remove all new line, carriage return, tab characters \
     from the string, to allow integer / float comparison."
   FROM_VERSION="${FROM_VERSION//[$'\t\r\n ']}"
@@ -67,7 +64,6 @@ function update() {
   debug "${from}: version: ${FROM_VERSION} (${FROM_DATE})"
   debug "${to}: version: ${TO_VERSION} (${TO_DATE})"
 
-  #
   debug "Check existence. If not, then give default value."
   if [ -z "${FROM_VERSION}" ]; then FROM_VERSION=0; fi
   if [ -z "${FROM_DATE}" ]; then FROM_DATE=1970-01-01; fi
@@ -76,9 +72,7 @@ function update() {
   debug "${from}: version: ${FROM_VERSION} (${FROM_DATE})"
   debug "${to}: version: ${TO_VERSION} (${TO_DATE})"
 
-  #
   debug "Make update happen only when newest version is not yet present."
-  #
   printf "==> ${to}"
   if [ ! -s "${to}" ]; then
     /bin/cp --preserve ${from} ${to};
@@ -92,7 +86,7 @@ function update() {
       debug "Make backup of ${to} into ${to}.bak"
       /bin/cp --preserve ${to} ${to}.bak;
       debug "Remove previous version from ${to} if exists, to avoid duplicate handys ..."
-      /bin/sed --in-place --quiet '/^###################################################################$/,$d' ${to}
+      /bin/sed --in-place '/^###################################################################$/,$d' ${to}
       debug "Add newline to the end of ${to} if not present yet to avoid script errors."
       [ -n "$(tail --quiet --bytes=1 ${to})" ] && printf '\n' >> ${to};
     fi
